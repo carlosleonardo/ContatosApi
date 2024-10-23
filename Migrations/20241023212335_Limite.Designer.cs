@@ -3,6 +3,7 @@ using System;
 using ContatosApi.Modelo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ContatosApi.Migrations
 {
     [DbContext(typeof(ContatosDBContext))]
-    partial class ContatosDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241023212335_Limite")]
+    partial class Limite
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
