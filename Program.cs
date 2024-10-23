@@ -28,7 +28,46 @@ if (app.Environment.IsDevelopment())
 	});
 }
 
+var contatosMap = app.MapGroup("/contatos");
 
-app.MapGet("/", () => "Hello World!");
+contatosMap.MapGet("/", async (ContatosDBContext db) =>
+{
+	return TypedResults.Ok(await db.Contatos.ToListAsync());
+});
+
+contatosMap.MapGet("/{id}", async Task<IResult> (ContatosDBContext db, int id) =>
+{
+	return await db.Contatos.FindAsync(id)
+		is Contato contato
+		? TypedResults.Ok(contato)
+		: TypedResults.NotFound();
+});
+contatosMap.MapPost("/", async (ContatosDBContext db, Contato contato) =>
+{
+	db.Contatos.Add(contato);
+	await db.SaveChangesAsync();
+	return TypedResults.Created($"/contatos/{contato.Id}", contato);
+});
+contatosMap.MapPut("/{id}", async Task<IResult> (ContatosDBContext db, Contato contatoAtualizado, int id) =>
+{
+	var contato = await db.Contatos.FindAsync(id);
+	if (contato is null) return TypedResults.NotFound();
+	contato.Nome = contatoAtualizado.Nome;
+	contato.Telefone = contatoAtualizado.Telefone;
+	contato.Email = contatoAtualizado.Email;
+	contato.Endereco = contatoAtualizado.Endereco;
+	contato.Observacao = contatoAtualizado.Observacao;
+	contato.DataNascimento = contatoAtualizado.DataNascimento;
+	await db.SaveChangesAsync();
+	return TypedResults.NoContent();
+});
+contatosMap.MapDelete("/{id}", async Task<IResult> (ContatosDBContext db, int id) =>
+{
+	var contato = await db.Contatos.FindAsync(id);
+	if (contato is null) return TypedResults.NotFound();
+	db.Contatos.Remove(contato);
+	await db.SaveChangesAsync();
+	return TypedResults.NoContent();
+});
 
 app.Run();
