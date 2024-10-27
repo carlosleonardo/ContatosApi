@@ -17,8 +17,16 @@ builder.Services.AddSwaggerGen(c =>
 	});
 });
 builder.Services.AddDbContext<ContatosDBContext>(options => options.UseSqlite(stringConexao));
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("Permissoes", builder =>
+	{
+		builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+	});
+});
 
 var app = builder.Build();
+app.UseCors("Permissoes");
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
@@ -44,6 +52,7 @@ contatosMap.MapGet("/{id}", async Task<IResult> (ContatosDBContext db, int id) =
 });
 contatosMap.MapPost("/", async (ContatosDBContext db, Contato contato) =>
 {
+	Console.WriteLine("Data de Nascimento", contato.DataNascimento);
 	db.Contatos.Add(contato);
 	await db.SaveChangesAsync();
 	return TypedResults.Created($"/contatos/{contato.Id}", contato);

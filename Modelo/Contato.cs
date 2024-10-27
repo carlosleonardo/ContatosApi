@@ -17,5 +17,5 @@ public class Contato
     [StringLength(300), Display(Name = "Observação")]
     public string? Observacao { get; set; }
     [Display(Name = "Data de Nascimento")]
-    public DateOnly DataNascimento { get; set; }
+    public DateTime DataNascimento { get; set; }
 }
