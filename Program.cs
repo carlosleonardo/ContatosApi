@@ -19,9 +19,9 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<ContatosDBContext>(options => options.UseSqlite(stringConexao));
 builder.Services.AddCors(options =>
 {
-	options.AddPolicy("Permissoes", builder =>
+	options.AddPolicy("Permissoes", optionsBuilder =>
 	{
-		builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+		optionsBuilder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 	});
 });
 
